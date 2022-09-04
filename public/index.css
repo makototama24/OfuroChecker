@@ -99,15 +99,20 @@ td{
 .card-title{
     font-size: 1em;
     margin-top: 0.5rem;
+    position: absolute;
+    top: 5%;
+    left: 8%;
 }
 
 .card-subtitle{
     font-size: 0.8em;
     margin-top: 0.5rem;
+    position: absolute;
+    left: 5%;
 }
 
 .kawaii-font{
-    font-family: cursive;
+    font-family: 'Montserrat', sans-serif;
 }
 
 /* ==================== Image =================================*/
