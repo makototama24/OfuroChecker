@@ -1,4 +1,6 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
+    
+
     // const loadEl = document.querySelector('#load');
 
     // firebase.storage().ref('stamp1.png').getDownloadURL().then((url) => {
@@ -38,8 +40,12 @@ document.addEventListener('DOMContentLoaded', function() {
     //   loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
     // }
 
-    document.querySelector('.card').addEventListener("click", function(){
+    document.querySelector('.card').addEventListener("click", function () {
         document.querySelector(".card-front").classList.toggle("reverse");
         document.querySelector(".card-back").classList.toggle("reverse");
-      });
-  });
+    });
+
+    document.querySelector('.cell').addEventListener("click", function () {
+        alert("click");
+    })
+});

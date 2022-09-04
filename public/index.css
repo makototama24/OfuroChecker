@@ -11,6 +11,8 @@ body{
     align-items: center;
 }
 
+/* ==================== Card =================================*/
+
 .card{
     background: none;
     border: none;
@@ -68,8 +70,38 @@ body{
     /* X軸に0度回転 */
 }
 
+/* ==================== Table =================================*/
+
+.stamp-table {
+    display: table;
+    position: absolute;
+    table-layout: fixed;
+    border-collapse: collapse;
+    width: 90%;
+    height: 80%;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-40%) translateX(-50%);
+}
+
+td{
+    width: 10%;
+    height: 20%;
+    text-align:center; 
+    vertical-align:middle;
+    font-size:0.1rem;
+}
+
+/* ==================== Font =================================*/
+
 .card-title{
     font-size: 1em;
+    margin-top: 0.5rem;
+}
+
+.card-subtitle{
+    font-size: 0.8em;
+    margin-top: 0.5rem;
 }
 
 .kawaii-font{
@@ -92,4 +124,9 @@ body{
     height: auto;
     top: 20%;
     left: 45%;
+}
+
+.back-stamp-img{
+    width: 70%;
+    height: 70%;
 }
