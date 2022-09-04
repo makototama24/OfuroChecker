@@ -1,6 +1,31 @@
-document.addEventListener('DOMContentLoaded', function () {
-    
+// import firebase from '@/plugins/firebase'
 
+$(function () {
+    firebase.storage().ref('03.jpg').getDownloadURL().then((url) => {
+        $(".bg-img").attr("src", url);
+    });
+    firebase.storage().ref('ofuro.png').getDownloadURL().then((url) => {
+        $(".front-img").attr("src", url);
+    });
+
+    const stamp = 50;
+
+    for (let i = 1; i <= 50; i++) {
+        if (i <= stamp) {
+            var num = Math.floor(Math.random() * 31) + 1;
+            firebase.storage().ref("stamp" + num + ".png").getDownloadURL().then((url) => {
+               $(".stamp" + i).append('<img src="'+ url +'" class="back-stamp-img">');
+            });
+        }else{
+            $(".stamp"+i).append(i);
+        }
+    }
+
+    if(stamp == 50){
+        $(".card-subtitle").append("  Congratulation!")
+    }
+
+    firebase.database().ref('/user/1').on('value', snapshot => { });
     // const loadEl = document.querySelector('#load');
 
     // firebase.storage().ref('stamp1.png').getDownloadURL().then((url) => {
@@ -40,12 +65,13 @@ document.addEventListener('DOMContentLoaded', function () {
     //   loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
     // }
 
-    document.querySelector('.card').addEventListener("click", function () {
-        document.querySelector(".card-front").classList.toggle("reverse");
-        document.querySelector(".card-back").classList.toggle("reverse");
+    $('.card').on("click", function () {
+        $(".card-front").toggleClass("reverse");
+        $(".card-back").toggleClass("reverse");
     });
 
-    document.querySelector('.cell').addEventListener("click", function () {
+    $('.cell').on("click", function (e) {
+        e.stopPropagation();
         alert("click");
     })
 });
