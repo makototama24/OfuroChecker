@@ -14,15 +14,19 @@ $(function () {
         if (i <= stamp) {
             var num = Math.floor(Math.random() * 31) + 1;
             firebase.storage().ref("stamp" + num + ".png").getDownloadURL().then((url) => {
-               $(".stamp" + i).append('<img src="'+ url +'" class="back-stamp-img">');
+                $(".stamp" + i).append('<img src="' + url + '" class="back-stamp-img">');
             });
-        }else{
-            $(".stamp"+i).append(i);
+        } else {
+            $(".stamp" + i).append(i);
         }
     }
 
-    if(stamp == 50){
-        $(".card-subtitle").append("  Congratulation!")
+    if (stamp < 2) {
+        $(".card-subtitle").append(stamp + " Stamp!")
+    } else if (stamp < 50) {
+        $(".card-subtitle").append(stamp + " Stamps!")
+    } else if (stamp == 50) {
+        $(".card-subtitle").append("50 Stamps!  Congratulation!")
     }
 
     firebase.database().ref('/user/1').on('value', snapshot => { });
