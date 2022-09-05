@@ -32,6 +32,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@1,300&display=swap" rel="stylesheet">
+
+  <!-- Firebase Authentication -->
+  <script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
+  <link href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css" rel="stylesheet" type="text/css">
+
   <!-- 
       initialize the SDK after all desired features are loaded, set useEmulator to false
       to avoid connecting the SDK to running emulators.
@@ -42,80 +47,89 @@
 </head>
 
 <body>
-  <div class="card">
-    <div class="card-front">
-      <img src="" class="bg-img">
-      <div class="container">
-        <h1 class="card-title kawaii-font">OFURO<br>RELAXING<br>LIFE</h1>
-      </div>
-      <img src="" class="front-img">
+  
+  <nav class="navbar navbar-light">
+    <div class="container-fluid">
+      <span class="navbar-brand mb-0 h1"></span>
+      <div id="auth"></div>
     </div>
-    <div class="card-back">
-      <img src="" class="bg-img">
-      <div class="container">
-        <h1 class="card-subtitle kawaii-font"></h1>
-        <table class="stamp-table">
-          <tr>
-            <td class="stamp1"></td>
-            <td class="stamp2"></td>
-            <td class="stamp3"></td>
-            <td class="stamp4"></td>
-            <td class="stamp5"></td>
-            <td class="stamp6"></td>
-            <td class="stamp7"></td>
-            <td class="stamp8"></td>
-            <td class="stamp9"></td>
-            <td class="stamp10"></td>
-          </tr>
-          <tr>
-            <td class="stamp11"></td>
-            <td class="stamp12"></td>
-            <td class="stamp13"></td>
-            <td class="stamp14"></td>
-            <td class="stamp15"></td>
-            <td class="stamp16"></td>
-            <td class="stamp17"></td>
-            <td class="stamp18"></td>
-            <td class="stamp19"></td>
-            <td class="stamp20"></td>
-          </tr>
-          <tr>
-            <td class="stamp21"></td>
-            <td class="stamp22"></td>
-            <td class="stamp23"></td>
-            <td class="stamp24"></td>
-            <td class="stamp25"></td>
-            <td class="stamp26"></td>
-            <td class="stamp27"></td>
-            <td class="stamp28"></td>
-            <td class="stamp29"></td>
-            <td class="stamp30"></td>
-          </tr>
-          <tr>
-            <td class="stamp31"></td>
-            <td class="stamp32"></td>
-            <td class="stamp33"></td>
-            <td class="stamp34"></td>
-            <td class="stamp35"></td>
-            <td class="stamp36"></td>
-            <td class="stamp37"></td>
-            <td class="stamp38"></td>
-            <td class="stamp39"></td>
-            <td class="stamp40"></td>
-          </tr>
-          <tr>
-            <td class="stamp41"></td>
-            <td class="stamp42"></td>
-            <td class="stamp43"></td>
-            <td class="stamp44"></td>
-            <td class="stamp45"></td>
-            <td class="stamp46"></td>
-            <td class="stamp47"></td>
-            <td class="stamp48"></td>
-            <td class="stamp49"></td>
-            <td class="stamp50"></td>
-          </tr>
-        </table>
+  </nav>
+  <div class="contents">
+    <div class="card">
+      <div class="card-front">
+        <img src="" class="bg-img">
+        <div class="container">
+          <h1 class="card-title kawaii-font">OFURO<br>RELAXING<br>LIFE</h1>
+        </div>
+        <img src="" class="front-img">
+      </div>
+      <div class="card-back">
+        <img src="" class="bg-img">
+        <div class="container">
+          <h1 class="card-subtitle kawaii-font"></h1>
+          <table class="stamp-table">
+            <tr>
+              <td class="stamp1"></td>
+              <td class="stamp2"></td>
+              <td class="stamp3"></td>
+              <td class="stamp4"></td>
+              <td class="stamp5"></td>
+              <td class="stamp6"></td>
+              <td class="stamp7"></td>
+              <td class="stamp8"></td>
+              <td class="stamp9"></td>
+              <td class="stamp10"></td>
+            </tr>
+            <tr>
+              <td class="stamp11"></td>
+              <td class="stamp12"></td>
+              <td class="stamp13"></td>
+              <td class="stamp14"></td>
+              <td class="stamp15"></td>
+              <td class="stamp16"></td>
+              <td class="stamp17"></td>
+              <td class="stamp18"></td>
+              <td class="stamp19"></td>
+              <td class="stamp20"></td>
+            </tr>
+            <tr>
+              <td class="stamp21"></td>
+              <td class="stamp22"></td>
+              <td class="stamp23"></td>
+              <td class="stamp24"></td>
+              <td class="stamp25"></td>
+              <td class="stamp26"></td>
+              <td class="stamp27"></td>
+              <td class="stamp28"></td>
+              <td class="stamp29"></td>
+              <td class="stamp30"></td>
+            </tr>
+            <tr>
+              <td class="stamp31"></td>
+              <td class="stamp32"></td>
+              <td class="stamp33"></td>
+              <td class="stamp34"></td>
+              <td class="stamp35"></td>
+              <td class="stamp36"></td>
+              <td class="stamp37"></td>
+              <td class="stamp38"></td>
+              <td class="stamp39"></td>
+              <td class="stamp40"></td>
+            </tr>
+            <tr>
+              <td class="stamp41"></td>
+              <td class="stamp42"></td>
+              <td class="stamp43"></td>
+              <td class="stamp44"></td>
+              <td class="stamp45"></td>
+              <td class="stamp46"></td>
+              <td class="stamp47"></td>
+              <td class="stamp48"></td>
+              <td class="stamp49"></td>
+              <td class="stamp50"></td>
+            </tr>
+          </table>
+        </div>
       </div>
     </div>
   </div>

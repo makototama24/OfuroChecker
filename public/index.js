@@ -1,12 +1,38 @@
 // import firebase from '@/plugins/firebase'
+var provider = null;
 
 $(function () {
+    // Set Background Image
     firebase.storage().ref('03.jpg').getDownloadURL().then((url) => {
         $(".bg-img").attr("src", url);
     });
     firebase.storage().ref('ofuro.png').getDownloadURL().then((url) => {
         $(".front-img").attr("src", url);
     });
+
+
+    // Header Contents
+    provider = new firebase.auth.GoogleAuthProvider();
+    firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+            $("#auth").empty();
+            const imgURL = user.photoURL;
+            const signOutMessage = `<img src="`+imgURL+`" width="35px" height="auto">
+            <button class="btn btn-outline-danger" type="submit"  onClick="signOut()">Sign out<\/button>
+            `;
+            $('#auth').append(signOutMessage);
+            console.log(user.displayName+'（'+user.uid+'）でログインしています');
+            console.log(imgURL);
+
+        } else {
+            $("#auth").empty();
+            const signInMessage = `
+              <button class="btn btn-outline-primary" type="submit"  onClick="signIn()">Sign in<\/button>
+              `;
+            $('#auth').append(signInMessage);
+        }
+    });
+
 
     const stamp = 50;
 
@@ -29,7 +55,7 @@ $(function () {
         $(".card-subtitle").append("50 Stamps!  Congratulation!")
     }
 
-    firebase.database().ref('/user/1').on('value', snapshot => { });
+    // firebase.database().ref('/user/1').on('value', snapshot => { });
     // const loadEl = document.querySelector('#load');
 
     // firebase.storage().ref('stamp1.png').getDownloadURL().then((url) => {
@@ -79,3 +105,31 @@ $(function () {
         alert("click");
     })
 });
+
+function signIn() {
+    firebase.auth().signInWithPopup(provider)
+        .then(result => {
+            console.log('ログインしました。');
+
+        }).catch(error => {
+            const signinError = `
+          サインインエラー
+          エラーメッセージ： ${error.message}
+          エラーコード: ${error.code}
+          `
+            console.log(signinError);
+        });
+}
+
+function signOut() {
+    firebase.auth().onAuthStateChanged(user => {
+        firebase.auth().signOut()
+            .then(() => {
+                console.log('ログアウトしました');
+                location.reload();
+            })
+            .catch((error) => {
+                console.log(`ログアウト時にエラーが発生しました (${error})`);
+            });
+    });
+}
