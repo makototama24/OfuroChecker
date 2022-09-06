@@ -17,12 +17,70 @@ $(function () {
         if (user) {
             $("#auth").empty();
             const imgURL = user.photoURL;
-            const signOutMessage = `<img src="`+imgURL+`" width="35px" height="auto">
-            <button class="btn btn-outline-danger" type="submit"  onClick="signOut()">Sign out<\/button>
-            `;
+            const signOutMessage = '<img src="' + imgURL + '" width="35px" height="auto"><button class="btn btn-outline-danger" type="submit"  onClick="signOut()">Sign out<\/button>';
             $('#auth').append(signOutMessage);
-            console.log(user.displayName+'（'+user.uid+'）でログインしています');
-            console.log(imgURL);
+            const bathBtn = '<button class="btn btn-primary put-stamp">入浴</button>';
+            $('.card-front').append(bathBtn);
+
+            // Get Stamp count from firestore
+            var stamp = 0;
+            firebase.firestore().collection('user').doc(user.uid)
+                .get()
+                .then((doc) => {
+                    if (doc.exists) {
+                        console.log(doc.data().stamp)
+                        stamp = doc.data().stamp;
+                    } else {
+                        console.log("no data");
+                    }
+                    
+                    // Create Image Table
+                    for (let i = 1; i <= 50; i++) {
+                        if (i <= stamp) {
+                            var num = Math.floor(Math.random() * 31) + 1;
+                            firebase.storage().ref("stamp" + num + ".png").getDownloadURL().then((url) => {
+                                $(".stamp" + i).append('<img src="' + url + '" class="back-stamp-img">');
+                            });
+                        } else {
+                            $(".stamp" + i).append(i);
+                        }
+                    }
+
+                    if (stamp < 2) {
+                        $(".card-subtitle").append(stamp + " Stamp!")
+                    } else if (stamp < 50) {
+                        $(".card-subtitle").append(stamp + " Stamps!")
+                    } else if (stamp == 50) {
+                        $(".card-subtitle").append("50 Stamps!  Congratulation!")
+                    }
+                });
+
+
+
+            // Rotate card
+            $('.card').on("click", function () {
+                $(".card-front").toggleClass("reverse");
+                $(".card-back").toggleClass("reverse");
+            });
+
+            $('.cell').on("click", function (e) {
+                e.stopPropagation();
+                alert("click");
+            })
+
+            $('.put-stamp').on("click", function (e) {
+                e.stopPropagation();
+                stamp = stamp + 1;
+                // Write stamp count from firestore
+                firebase.firestore().collection('user').doc(user.uid)
+                    .update({
+                        "name": user.displayName,
+                        "stamp": stamp
+                    })
+                    .then(() => {
+                        console.log(stamp);
+                    });
+            })
 
         } else {
             $("#auth").empty();
@@ -33,27 +91,6 @@ $(function () {
         }
     });
 
-
-    const stamp = 50;
-
-    for (let i = 1; i <= 50; i++) {
-        if (i <= stamp) {
-            var num = Math.floor(Math.random() * 31) + 1;
-            firebase.storage().ref("stamp" + num + ".png").getDownloadURL().then((url) => {
-                $(".stamp" + i).append('<img src="' + url + '" class="back-stamp-img">');
-            });
-        } else {
-            $(".stamp" + i).append(i);
-        }
-    }
-
-    if (stamp < 2) {
-        $(".card-subtitle").append(stamp + " Stamp!")
-    } else if (stamp < 50) {
-        $(".card-subtitle").append(stamp + " Stamps!")
-    } else if (stamp == 50) {
-        $(".card-subtitle").append("50 Stamps!  Congratulation!")
-    }
 
     // firebase.database().ref('/user/1').on('value', snapshot => { });
     // const loadEl = document.querySelector('#load');
@@ -94,16 +131,6 @@ $(function () {
     //   console.error(e);
     //   loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
     // }
-
-    $('.card').on("click", function () {
-        $(".card-front").toggleClass("reverse");
-        $(".card-back").toggleClass("reverse");
-    });
-
-    $('.cell').on("click", function (e) {
-        e.stopPropagation();
-        alert("click");
-    })
 });
 
 function signIn() {
