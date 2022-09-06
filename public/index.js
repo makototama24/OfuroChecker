@@ -19,21 +19,37 @@ $(function () {
             const imgURL = user.photoURL;
             const signOutMessage = '<img src="' + imgURL + '" width="35px" height="auto"><button class="btn btn-outline-danger" type="submit"  onClick="signOut()">Sign out<\/button>';
             $('#auth').append(signOutMessage);
-            const bathBtn = '<button class="btn btn-primary put-stamp">入浴</button>';
+            const bathBtn = '<button class="btn btn-primary put-stamp">Take a Bath</button>';
             $('.card-front').append(bathBtn);
 
-            // Get Stamp count from firestore
             var stamp = 0;
-            firebase.firestore().collection('user').doc(user.uid)
+            var lastClickedDate = null;
+            var ref = firebase.firestore().collection('user').doc(user.uid);
+
+            ref
                 .get()
                 .then((doc) => {
+                    // Get Stamp count from firestore
                     if (doc.exists) {
-                        console.log(doc.data().stamp)
                         stamp = doc.data().stamp;
+                        lastClickedDate = new Date(doc.data().lastClickedDate);
+                        console.log("-- read --");
+                        console.log("stamp: " + stamp);
+                        console.log("lastClickedDate: " + lastClickedDate);
                     } else {
+                        lastClickedDate = new Date('1900-01-01T00:00:00');
+                        console.log("-- read --");
                         console.log("no data");
                     }
-                    
+
+                    // Check Date
+                    if (new Date().getYear() === lastClickedDate.getYear() &&
+                        new Date().getMonth() === lastClickedDate.getMonth() &&
+                        new Date().getDate() === lastClickedDate.getDate()) {
+                        $(".put-stamp").prop('disabled', true);
+                        $(".put-stamp").html('Already Bathed');
+                    }
+
                     // Create Image Table
                     for (let i = 1; i <= 50; i++) {
                         if (i <= stamp) {
@@ -63,25 +79,43 @@ $(function () {
                 $(".card-back").toggleClass("reverse");
             });
 
-            $('.cell').on("click", function (e) {
-                e.stopPropagation();
-                alert("click");
-            })
-
+            // Click 入浴ボタン
             $('.put-stamp').on("click", function (e) {
                 e.stopPropagation();
-                stamp = stamp + 1;
-                // Write stamp count from firestore
-                firebase.firestore().collection('user').doc(user.uid)
-                    .update({
-                        "name": user.displayName,
-                        "stamp": stamp
-                    })
-                    .then(() => {
-                        console.log(stamp);
-                    });
-            })
+                stamp++;
 
+                // Write stamp count from firestore
+                ref.get()
+                    .then((doc) => {
+                        if (doc.exists) {
+                            ref
+                                .update({
+                                    "name": user.displayName,
+                                    "stamp": stamp,
+                                    "lastClickedDate": new Date().toString()
+                                })
+                                .then(() => {
+                                    console.log("-- write --");
+                                    console.log("stamp: " + stamp);
+                                    console.log("lastClickedDate: " + new Date().toString());
+                                });
+                        } else {
+                            ref
+                                .set({
+                                    "name": user.displayName,
+                                    "stamp": stamp,
+                                    "lastClickedDate": new Date().toString()
+                                })
+                                .then(() => {
+                                    console.log("-- write --");
+                                    console.log("stamp :" + stamp);
+                                    console.log("lastClickedDate :" + new Date().toString());
+                                });
+                        }
+                    })
+                $(".put-stamp").prop('disabled', true);
+                $(".put-stamp").html('Already Bathed');
+            })
         } else {
             $("#auth").empty();
             const signInMessage = `
