@@ -1,2 +1,2 @@
 # OfuroChecker
-https://github.com/makototama24/OfuroChecker
+https://ofurochecker.web.app/
