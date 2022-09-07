@@ -1,2 +1,2 @@
 # OfuroChecker
-https://img.shields.io/github/languages/code-size/makototama24/OfuroChecker
+https://github.com/makototama24/OfuroChecker
