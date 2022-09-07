@@ -49,6 +49,14 @@ $(function () {
                         new Date().getDate() === lastClickedDate.getDate()) {
                         $(".put-stamp").prop('disabled', true);
                         $(".put-stamp").html('Already Bathed');
+                    }else if(new Date().getHours() < 17){
+                        $(".put-stamp").prop('disabled', true);
+                        $(".put-stamp").css({
+                            "backgroundColor": "#ccc",
+                            "border-color": "#ccc",
+                            "color": "#444"
+                        })
+                        $(".put-stamp").html("Can't stamp now");
                     }
 
                     // Create Image Table
