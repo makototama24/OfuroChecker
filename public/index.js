@@ -1,5 +1,6 @@
 // import firebase from '@/plugins/firebase'
 var provider = null;
+const MAX_STAMP = 50;
 
 $(function () {
     // Set Background Image
@@ -19,7 +20,7 @@ $(function () {
             const imgURL = user.photoURL;
             const signOutMessage = '<img src="' + imgURL + '" width="35px" height="auto"><button class="btn btn-outline-danger" type="submit"  onClick="signOut()">Sign out<\/button>';
             $('#auth').append(signOutMessage);
-            const bathBtn = '<button class="btn btn-primary put-stamp">Take a Bath</button>';
+            const bathBtn = '<button class="btn put-stamp">Take a Bath</button>';
             $('.card-front').append(bathBtn);
 
             var stamp = 0;
@@ -51,7 +52,7 @@ $(function () {
                     }
 
                     // Create Image Table
-                    for (let i = 1; i <= 50; i++) {
+                    for (let i = 1; i <= MAX_STAMP; i++) {
                         if (i <= stamp) {
                             var num = Math.floor(Math.random() * 31) + 1;
                             firebase.storage().ref("stamp" + num + ".png").getDownloadURL().then((url) => {
@@ -60,14 +61,6 @@ $(function () {
                         } else {
                             $(".stamp" + i).append(i);
                         }
-                    }
-
-                    if (stamp < 2) {
-                        $(".card-subtitle").append(stamp + " Stamp!")
-                    } else if (stamp < 50) {
-                        $(".card-subtitle").append(stamp + " Stamps!")
-                    } else if (stamp == 50) {
-                        $(".card-subtitle").append("50 Stamps!  Congratulation!")
                     }
                 });
 
@@ -79,10 +72,31 @@ $(function () {
                 $(".card-back").toggleClass("reverse");
             });
 
-            // Click 入浴ボタン
+            // Click Bath Button
             $('.put-stamp').on("click", function (e) {
                 e.stopPropagation();
+                $(".put-stamp").prop('disabled', true);
+                $(".put-stamp").html('Already Bathed');
+
+                
                 stamp++;
+                if (MAX_STAMP < stamp) {
+                    stamp = 1;
+                    for (let i = 1; i <= MAX_STAMP; i++) {
+                        $(".stamp" + i).empty();
+                        $(".stamp" + i).append(i);
+                    }
+                }
+                $(".stamp" + stamp).empty();
+
+                $(".card-front").toggleClass("reverse");
+                $(".card-back").toggleClass("reverse");
+
+                // Add Stamp in back card
+                var num = Math.floor(Math.random() * 31) + 1;
+                firebase.storage().ref("stamp" + num + ".png").getDownloadURL().then((url) => {
+                    $(".stamp" + stamp).append('<img src="' + url + '" class="back-stamp-img animation">');
+                });
 
                 // Write stamp count from firestore
                 ref.get()
@@ -113,8 +127,6 @@ $(function () {
                                 });
                         }
                     })
-                $(".put-stamp").prop('disabled', true);
-                $(".put-stamp").html('Already Bathed');
             })
         } else {
             $("#auth").empty();
@@ -124,47 +136,6 @@ $(function () {
             $('#auth').append(signInMessage);
         }
     });
-
-
-    // firebase.database().ref('/user/1').on('value', snapshot => { });
-    // const loadEl = document.querySelector('#load');
-
-    // firebase.storage().ref('stamp1.png').getDownloadURL().then((url) => {
-    //   document.getElementById("img").src = url;
-    // });
-    // // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-    // // // The Firebase SDK is initialized and available here!
-    // //
-    // // firebase.auth().onAuthStateChanged(user => { });
-    // // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
-    // // firebase.firestore().doc('/foo/bar').get().then(() => { });
-    // // firebase.functions().httpsCallable('yourFunction')().then(() => { });
-    // // firebase.messaging().requestPermission().then(() => { });
-    // // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
-    // // firebase.analytics(); // call to activate
-    // // firebase.analytics().logEvent('tutorial_completed');
-    // // firebase.performance(); // call to activate
-    // //
-    // // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-
-    // try {
-    //   let app = firebase.app();
-    //   let features = [
-    //     'auth', 
-    //     'database', 
-    //     'firestore',
-    //     'functions',
-    //     'messaging', 
-    //     'storage', 
-    //     'analytics', 
-    //     'remoteConfig',
-    //     'performance',
-    //   ].filter(feature => typeof app[feature] === 'function');
-    //   loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
-    // } catch (e) {
-    //   console.error(e);
-    //   loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
-    // }
 });
 
 function signIn() {
